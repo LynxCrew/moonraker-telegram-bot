@@ -362,8 +362,10 @@ class TelegramUIConfig(ConfigHelper):
         self.silent_status: bool = self._get_boolean("silent_status", default=False)
         self.include_macros_in_command_list: bool = self._get_boolean("include_macros_in_command_list", default=True)
         self.hidden_macros: List[str] = list(map(lambda el: el.upper(), self._get_list("hidden_macros", default=[])))
+        self.allowed_macros: List[str] = list(map(lambda el: el.upper(), self._get_list("allowed_macros", default=[])))
         self.hidden_bot_commands: List[str] = self._get_list("hidden_bot_commands", default=[])
         self.show_private_macros: bool = self._get_boolean("show_private_macros", default=False)
+        self.hide_macros: bool = self._get_boolean("hide_macros", default=False)
         self.pin_status_single_message: bool = self._get_boolean("pin_status_single_message", default=False)  # Todo: implement
         self.status_message_m117_update: bool = self._get_boolean("status_message_m117_update", default=False)
 

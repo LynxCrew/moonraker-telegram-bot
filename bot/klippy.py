@@ -36,7 +36,9 @@ class Klippy:
     ):
         self._host: str = f"{config.bot_config.protocol}{config.bot_config.host}"
         self._hidden_macros: List[str] = config.telegram_ui.hidden_macros + [self._DATA_MACRO]
+        self._allowed_macros: List[str] = config.telegram_ui.allowed_macros
         self._show_private_macros: bool = config.telegram_ui.show_private_macros
+        self._hide_macros: bool = config.telegram_ui.hide_macros
         self._message_parts: List[str] = config.status_message_content.content
         self._eta_source: str = config.telegram_ui.eta_source
         self._light_device: PowerDevice = light_device
@@ -214,6 +216,8 @@ class Klippy:
     def _get_full_marco_list(self) -> List[str]:
         macro_lines = list(filter(lambda it: "gcode_macro" in it, self._objects_list))
         loaded_macros = list(map(lambda el: el.split(" ")[1].upper(), macro_lines))
+        if self._hide_macros or len(self._allowed_macros) > 0:
+            return [key for key in loaded_macros if key in self._allowed_macros]
         return loaded_macros
 
     def _get_marco_list(self) -> List[str]:
