@@ -321,6 +321,8 @@ class TelegramUIConfig(ConfigHelper):
         "progress_update_message",
         "include_macros_in_command_list",
         "hidden_macros",
+        "allowed_macros",
+        "hide_macros",
         "hidden_bot_commands",
         "show_private_macros",
         "eta_source",
