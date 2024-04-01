@@ -34,6 +34,7 @@ class Klippy:
         psu_device: PowerDevice,
         logging_handler: logging.Handler,
     ):
+        self._config = config
         self._host: str = f"{config.bot_config.protocol}{config.bot_config.host}"
         self._hidden_macros: List[str] = config.telegram_ui.hidden_macros + [self._DATA_MACRO]
         self._allowed_macros: List[str] = config.telegram_ui.allowed_macros
@@ -271,6 +272,9 @@ class Klippy:
         for key, val in self._SENSOR_PARAMS.items():
             if key in value:
                 self._sensors_dict[name][key] = value[val]
+
+    def tell_buttons(self):
+        return self._config.telegram_ui.buttons
 
     @staticmethod
     def _sensor_message(name: str, value) -> str:

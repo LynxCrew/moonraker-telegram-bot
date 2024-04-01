@@ -9,9 +9,6 @@ from typing import Any, Callable, List, Optional, Union
 from telegram.utils.helpers import escape
 
 
-logger = logging.getLogger(__name__)
-
-
 class ConfigHelper:
     _section: str
     _KNOWN_ITEMS: List[str]
@@ -378,7 +375,6 @@ class TelegramUIConfig(ConfigHelper):
         self.disable_upload: bool = self._get_boolean("disable_upload", default=False)
         self.pin_status_single_message: bool = self._get_boolean("pin_status_single_message", default=False)  # Todo: implement
         self.status_message_m117_update: bool = self._get_boolean("status_message_m117_update", default=False)
-        logger.debug(self.buttons)
 
 
 class StatusMessageContentConfig(ConfigHelper):
