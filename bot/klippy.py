@@ -273,9 +273,6 @@ class Klippy:
             if key in value:
                 self._sensors_dict[name][key] = value[val]
 
-    def tell_buttons(self):
-        return self._config.telegram_ui.buttons
-
     @staticmethod
     def _sensor_message(name: str, value) -> str:
         sens_name = re.sub(r"([A-Z]|\d|_)", r" \1", name).replace("_", "")
