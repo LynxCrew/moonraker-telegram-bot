@@ -39,6 +39,8 @@ class Klippy:
         self._allowed_macros: List[str] = config.telegram_ui.allowed_macros
         self._show_private_macros: bool = config.telegram_ui.show_private_macros
         self._hide_macros: bool = config.telegram_ui.hide_macros
+        self._hide_files: bool = config.telegram_ui.hide_files
+        self.disable_upload: bool = config.telegram_ui.disable_upload
         self._message_parts: List[str] = config.status_message_content.content
         self._eta_source: str = config.telegram_ui.eta_source
         self._light_device: PowerDevice = light_device
@@ -448,6 +450,8 @@ class Klippy:
         return self._populate_with_thumb(thumb_path, message)
 
     def get_gcode_files(self):
+        if self._hide_files:
+            return []
         response = self._make_request("GET", "/server/files/list?root=gcodes")
         files = sorted(response.json()["result"], key=lambda item: item["modified"], reverse=True)
         return files
@@ -456,6 +460,8 @@ class Klippy:
         return self._make_request("POST", "/server/files/upload", files={"file": file, "root": "gcodes", "path": upload_path}).ok
 
     def start_printing_file(self, filename: str) -> bool:
+        if self._hide_files:
+            return True
         return self._make_request("POST", f"/printer/print/start?filename={urllib.parse.quote(filename)}").ok
 
     def stop_all(self) -> None:
