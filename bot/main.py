@@ -1040,8 +1040,10 @@ def start_bot(bot_token, socks):
     dispatcher.add_handler(CommandHandler("bot_restart", bot_restart))
     dispatcher.add_handler(CommandHandler("fw_restart", firmware_restart))
     dispatcher.add_handler(CommandHandler("services", services_keyboard))
-    dispatcher.add_handler(CommandHandler("files", get_gcode_files, run_async=True))
-    dispatcher.add_handler(CommandHandler("macros", get_macros, run_async=True))
+    if not configWrap.telegram_ui.hide_files:
+        dispatcher.add_handler(CommandHandler("files", get_gcode_files, run_async=True))
+    if not configWrap.telegram_ui.hide_macros:
+        dispatcher.add_handler(CommandHandler("macros", get_macros, run_async=True))
     dispatcher.add_handler(CommandHandler("gcode", exec_gcode, run_async=True))
     dispatcher.add_handler(CommandHandler("logs", send_logs, run_async=True))
 
