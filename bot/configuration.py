@@ -379,7 +379,10 @@ class TelegramUIConfig(ConfigHelper):
             for line in self.buttons:
                 for i in range(0, line.count("/files")):
                     line.remove('/files')
-                    
+        if self.hide_files:
+            for line in self.buttons:
+                for i in range(0, line.count("/buttons")):
+                    line.remove('/buttons')
 
 
 class StatusMessageContentConfig(ConfigHelper):
