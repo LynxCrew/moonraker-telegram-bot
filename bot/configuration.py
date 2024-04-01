@@ -323,6 +323,8 @@ class TelegramUIConfig(ConfigHelper):
         "hidden_macros",
         "allowed_macros",
         "hide_macros",
+        "hide_files",
+        "disable_upload",
         "hidden_bot_commands",
         "show_private_macros",
         "eta_source",
