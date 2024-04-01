@@ -1,4 +1,5 @@
 import configparser
+import logging
 import os
 import pathlib
 from pathlib import Path
@@ -374,12 +375,7 @@ class TelegramUIConfig(ConfigHelper):
         self.disable_upload: bool = self._get_boolean("disable_upload", default=False)
         self.pin_status_single_message: bool = self._get_boolean("pin_status_single_message", default=False)  # Todo: implement
         self.status_message_m117_update: bool = self._get_boolean("status_message_m117_update", default=False)
-        if self.hide_macros:
-            for line in self.buttons:
-                line.remove("macros")
-        if self.hide_files:
-            for line in self.buttons:
-                line.remove("files")
+        logging.info(self.buttons)
 
 
 class StatusMessageContentConfig(ConfigHelper):
