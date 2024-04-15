@@ -1,4 +1,5 @@
 import configparser
+import logging
 import os
 import pathlib
 from pathlib import Path
@@ -321,6 +322,10 @@ class TelegramUIConfig(ConfigHelper):
         "progress_update_message",
         "include_macros_in_command_list",
         "hidden_macros",
+        "allowed_macros",
+        "hide_macros",
+        "hide_files",
+        "disable_upload",
         "hidden_bot_commands",
         "show_private_macros",
         "eta_source",
@@ -362,10 +367,22 @@ class TelegramUIConfig(ConfigHelper):
         self.silent_status: bool = self._get_boolean("silent_status", default=False)
         self.include_macros_in_command_list: bool = self._get_boolean("include_macros_in_command_list", default=True)
         self.hidden_macros: List[str] = list(map(lambda el: el.upper(), self._get_list("hidden_macros", default=[])))
+        self.allowed_macros: List[str] = list(map(lambda el: el.upper(), self._get_list("allowed_macros", default=[])))
         self.hidden_bot_commands: List[str] = self._get_list("hidden_bot_commands", default=[])
         self.show_private_macros: bool = self._get_boolean("show_private_macros", default=False)
+        self.hide_macros: bool = self._get_boolean("hide_macros", default=False)
+        self.hide_files: bool = self._get_boolean("hide_files", default=False)
+        self.disable_upload: bool = self._get_boolean("disable_upload", default=False)
         self.pin_status_single_message: bool = self._get_boolean("pin_status_single_message", default=False)  # Todo: implement
         self.status_message_m117_update: bool = self._get_boolean("status_message_m117_update", default=False)
+        if self.hide_macros:
+            for line in self.buttons:
+                for i in range(0, line.count("/macros")):
+                    line.remove('/macros')
+        if self.hide_files:
+            for line in self.buttons:
+                for i in range(0, line.count("/files")):
+                    line.remove('/files')
 
 
 class StatusMessageContentConfig(ConfigHelper):
