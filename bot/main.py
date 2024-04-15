@@ -769,7 +769,7 @@ def macros_handler(update: Update, _: CallbackContext) -> None:
 
 def upload_file(update: Update, _: CallbackContext) -> None:
     if klippy.disable_upload:
-        update.effective_message.reply_text(f"File upload is disabled")
+        update.effective_message.reply_text("File upload is disabled")
         return
     if update.effective_message is None or update.effective_message.bot is None:
         logger.warning("Undefined effective message or bot")
