@@ -768,13 +768,13 @@ def macros_handler(update: Update, _: CallbackContext) -> None:
 
 
 def upload_file(update: Update, _: CallbackContext) -> None:
-    if klippy.disable_upload:
-        update.effective_message.reply_text("File upload is disabled")
-        return
     if update.effective_message is None or update.effective_message.bot is None:
         logger.warning("Undefined effective message or bot")
         return
 
+    if klippy.disable_upload:
+        update.effective_message.reply_text("File upload is disabled")
+        return
     update.effective_message.bot.send_chat_action(chat_id=configWrap.secrets.chat_id, action=ChatAction.UPLOAD_DOCUMENT)
     doc = update.effective_message.document
     if doc is None or doc.file_name is None:
