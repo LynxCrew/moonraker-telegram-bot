@@ -375,7 +375,7 @@ class TelegramUIConfig(ConfigHelper):
         self.disable_upload: bool = self._get_boolean("disable_upload", default=False)
         self.pin_status_single_message: bool = self._get_boolean("pin_status_single_message", default=False)  # Todo: implement
         self.status_message_m117_update: bool = self._get_boolean("status_message_m117_update", default=False)
-        if self.hide_macros:
+        if self.hide_macros and len(self.allowed_macros) == 0:
             for line in self.buttons:
                 for i in range(0, line.count("/macros")):
                     line.remove('/macros')
