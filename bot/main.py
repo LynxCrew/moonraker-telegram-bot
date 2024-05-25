@@ -1042,7 +1042,7 @@ def start_bot(bot_token, socks):
     dispatcher.add_handler(CommandHandler("services", services_keyboard))
     if not configWrap.telegram_ui.hide_files:
         dispatcher.add_handler(CommandHandler("files", get_gcode_files, run_async=True))
-    if not configWrap.telegram_ui.hide_macros:
+    if not configWrap.telegram_ui.hide_macros or len(configWrap.telegram_ui.allowed_macros) > 0:
         dispatcher.add_handler(CommandHandler("macros", get_macros, run_async=True))
     dispatcher.add_handler(CommandHandler("gcode", exec_gcode, run_async=True))
     dispatcher.add_handler(CommandHandler("logs", send_logs, run_async=True))
