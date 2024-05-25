@@ -934,7 +934,7 @@ def bot_commands() -> Dict[str, str]:
         "shutdown": "shutdown Pi gracefully",
         "reboot": "reboot Pi gracefully",
     }
-    if configWrap.telegram_ui.hide_macros:
+    if configWrap.telegram_ui.hide_macros and len(configWrap.telegram_ui.allowed_macros) == 0:
         commands.pop('macros')
     if configWrap.telegram_ui.hide_files:
         commands.pop('files')
