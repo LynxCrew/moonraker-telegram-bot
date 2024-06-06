@@ -768,6 +768,11 @@ def macros_handler(update: Update, _: CallbackContext) -> None:
 
 
 def upload_file(update: Update, _: CallbackContext) -> None:
+    if klippy.disable_upload:
+        update.effective_message.reply_text(
+            f"File upload is disabled"
+        )
+        return
     if update.effective_message is None or update.effective_message.bot is None:
         logger.warning("Undefined effective message or bot")
         return
@@ -932,10 +937,10 @@ def bot_commands() -> Dict[str, str]:
         "shutdown": "shutdown Pi gracefully",
         "reboot": "reboot Pi gracefully",
     }
-    if configWrap.telegram_ui.hide_macros:
-        commands.pop("macros")
+    if configWrap.telegram_ui.hide_macros and len(configWrap.telegram_ui.allowed_macros) == 0:
+        commands.pop('macros')
     if configWrap.telegram_ui.hide_files:
-        commands.pop("files")
+        commands.pop('files')
     return {c: a for c, a in commands.items() if c not in configWrap.telegram_ui.hidden_bot_commands}
 
 
@@ -1040,7 +1045,7 @@ def start_bot(bot_token, socks):
     dispatcher.add_handler(CommandHandler("services", services_keyboard))
     if not configWrap.telegram_ui.hide_files:
         dispatcher.add_handler(CommandHandler("files", get_gcode_files, run_async=True))
-    if not configWrap.telegram_ui.hide_macros:
+    if not configWrap.telegram_ui.hide_macros or len(configWrap.telegram_ui.allowed_macros) > 0:
         dispatcher.add_handler(CommandHandler("macros", get_macros, run_async=True))
     dispatcher.add_handler(CommandHandler("gcode", exec_gcode, run_async=True))
     dispatcher.add_handler(CommandHandler("logs", send_logs, run_async=True))
