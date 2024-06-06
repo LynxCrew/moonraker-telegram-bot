@@ -167,8 +167,8 @@ create_service() {
 #Systemd service file for Moonraker Telegram Bot
 [Unit]
 Description=Starts Moonraker Telegram Bot on startup
-After=network-online.target moonraker.service
-Requires=moonraker.service
+After=network-online.target moonraker.service klippy.service
+Requires=moonraker.service klippy.service
 
 [Install]
 WantedBy=multi-user.target
@@ -176,6 +176,7 @@ WantedBy=multi-user.target
 [Service]
 Type=simple
 User=${CURRENT_USER}
+ExecStartPre=/bin/sleep 30
 ExecStart=${MOONRAKER_BOT_ENV}/bin/python ${MOONRAKER_BOT_DIR}/bot/main.py -c ${MOONRAKER_BOT_CONF}/telegram.conf -l ${MOONRAKER_BOT_LOG}
 Restart=always
 RestartSec=5
