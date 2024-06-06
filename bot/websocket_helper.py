@@ -433,7 +433,7 @@ class WebSocketHelper:
 
         for mes in messages:
             self.websocket_to_message(self.websocket, mes)
-            time.sleep(0.01)
+            time.sleep(1)
         print("lalal")
 
     def run_forever(self):
