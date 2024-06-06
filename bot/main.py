@@ -768,11 +768,6 @@ def macros_handler(update: Update, _: CallbackContext) -> None:
 
 
 def upload_file(update: Update, _: CallbackContext) -> None:
-    if klippy.disable_upload:
-        update.effective_message.reply_text(
-            f"File upload is disabled"
-        )
-        return
     if update.effective_message is None or update.effective_message.bot is None:
         logger.warning("Undefined effective message or bot")
         return
@@ -938,9 +933,9 @@ def bot_commands() -> Dict[str, str]:
         "reboot": "reboot Pi gracefully",
     }
     if configWrap.telegram_ui.hide_macros and len(configWrap.telegram_ui.allowed_macros) == 0:
-        commands.pop('macros')
+        commands.pop("macros")
     if configWrap.telegram_ui.hide_files:
-        commands.pop('files')
+        commands.pop("files")
     return {c: a for c, a in commands.items() if c not in configWrap.telegram_ui.hidden_bot_commands}
 
 
