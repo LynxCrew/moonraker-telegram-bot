@@ -167,8 +167,8 @@ create_service() {
 #Systemd service file for Moonraker Telegram Bot
 [Unit]
 Description=Starts Moonraker Telegram Bot on startup
-After=network-online.target moonraker.service
-Requires=moonraker.service
+After=network-online.target moonraker.service klipper.service
+Requires=moonraker.service klipper.service
 
 [Install]
 WantedBy=multi-user.target
