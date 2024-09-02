@@ -5,6 +5,7 @@ from pathlib import Path
 import re
 from typing import Dict, List, Optional, Union
 
+import pytz
 from apscheduler.schedulers.base import BaseScheduler  # type: ignore
 from telegram import Bot, ChatAction, InlineKeyboardButton, InputMediaAudio, InputMediaDocument, InputMediaPhoto, InputMediaVideo, Message
 from telegram.constants import PARSEMODE_MARKDOWN_V2
@@ -33,6 +34,8 @@ class Notifier:
         self._cam_wrap: Camera = camera_wrapper
         self._sched: BaseScheduler = scheduler
         self._klippy: Klippy = klippy
+
+        self._timezone: str = config.bot_config.timezone
 
         self._enabled: bool = config.notifications.enabled
         self._percent: int = config.notifications.percent
@@ -319,7 +322,7 @@ class Notifier:
         if self._last_tgnotify_status and "tgnotify_status" in self._message_parts:
             mess += f"{escape_markdown(self._last_tgnotify_status, version=2)}\n"
         if "last_update_time" in self._message_parts:
-            mess += f"_Last update at {datetime.now():%H:%M:%S}_"
+            mess += f"_Last update at {datetime.now(pytz.timezone(self._timezone)):%H:%M:%S}_"
         if schedule:
             self._sched.add_job(
                 self._notify,

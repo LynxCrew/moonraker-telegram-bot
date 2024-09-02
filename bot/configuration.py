@@ -177,7 +177,7 @@ class SecretsConfig(ConfigHelper):
 
 class BotConfig(ConfigHelper):
     _section = "bot"
-    _KNOWN_ITEMS = ["bot_token", "chat_id", "user", "password", "api_token", "server", "socks_proxy", "debug", "log_parser", "power_device", "light_device", "upload_path", "services"]
+    _KNOWN_ITEMS = ["bot_token", "chat_id", "user", "password", "api_token", "server", "socks_proxy", "debug", "log_parser", "power_device", "light_device", "upload_path", "services", "timezone"]
 
     def __init__(self, config: configparser.ConfigParser):
         super().__init__(config)
@@ -193,6 +193,7 @@ class BotConfig(ConfigHelper):
         self.log_file: str = self._get_str("log_path", default="/tmp")
         self.upload_path: str = self._get_str("upload_path", default="")
         self.services: List[str] = self._get_list("services", ["klipper", "moonraker"])
+        self.timezone: str = self._get_str("timezone", default="Etc/UTC")
         self.log_parser: bool = self._get_boolean("log_parser", default=False)
 
     @property
