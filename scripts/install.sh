@@ -5,7 +5,7 @@ set -eu
 SYSTEMDDIR="/etc/systemd/system"
 MOONRAKER_BOT_SERVICE="moonraker-telegram-bot.service"
 MOONRAKER_BOT_ENV="${HOME}/moonraker-telegram-bot-env"
-MOONRAKER_BOT_DIR="${HOME}/moonraker-telegram-bot"
+MOONRAKER_BOT_DIR=$(dirname $(dirname "$(realpath $0)"))
 MOONRAKER_BOT_LOG="${HOME}/printer_data/logs/telegram.log"
 MOONRAKER_BOT_CONF="${HOME}/printer_data/config"
 KLIPPER_CONF_DIR="${HOME}/printer_data/config"
@@ -120,15 +120,17 @@ stop_sevice() {
 }
 
 install_packages() {
-  PKGLIST="python3-virtualenv python3-dev python3-cryptography python3-gevent python3-opencv x264 libx264-dev libwebp-dev"
-
+  PKGLIST=""
   report_status "Running apt-get update..."
   sudo apt-get update --allow-releaseinfo-change
-  for pkg in $PKGLIST; do
-    echo "${cyan}$pkg${default}"
-  done
+  PKGLIST="python3-virtualenv python3-numpy libuv1 ffmpeg x264 libx264-dev libjpeg*-turbo libwebp-dev"
   report_status "Installing packages..."
   sudo apt-get install --yes ${PKGLIST}
+}
+
+fix_permissions() {
+  echo "kernel.dmesg_restrict = 0" | sudo tee /etc/sysctl.d/51-dmesg-restrict.conf > /dev/null
+  sudo sysctl kernel.dmesg_restrict=0
 }
 
 create_virtualenv() {
@@ -198,6 +200,7 @@ install_instances(){
   sudo systemctl stop moonraker-telegram-bot*
   status_msg "Installing dependencies"
   install_packages
+  fix_permissions
   create_virtualenv
 
   init_config_path

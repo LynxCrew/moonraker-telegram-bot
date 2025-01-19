@@ -1,10 +1,11 @@
-FROM python:3.12.7-slim-bookworm
+FROM python:3.12.7-bookworm
 
 RUN apt update \
  && apt install -y \
       ffmpeg x264 libx264-dev libuv1 \
       libwebp-dev libtiff5-dev libjpeg*-turbo libjpeg*-turbo-dev libopenjp2-7-dev  \
       zlib1g-dev libfreetype6-dev liblcms2-dev \
+      build-essential python3-dev libdebuginfod-dev libunwind-dev liblz4-dev \
  && apt clean \
  && rm -rf /var/lib/apt/lists/*
 
@@ -19,8 +20,11 @@ RUN groupadd moonraker-telegram-bot --gid 1000 \
 COPY --chown=moonraker-telegram-bot:moonraker-telegram-bot . ./moonraker-telegram-bot
 RUN pip3 install --no-cache-dir -r moonraker-telegram-bot/scripts/requirements.docker.opencv.txt
 
+RUN pip3 install --no-cache-dir memray==1.14.0
+RUN pip3 install --no-cache-dir memory-profiler
 
 USER moonraker-telegram-bot
 VOLUME [ "/opt/printer_data/logs", "/opt/printer_data/config", "/opt/timelapse","/opt/timelapse_finished"]
+# ENTRYPOINT ["python3", "-m", "memray", "run", "--native", "--trace-python-allocators", "moonraker-telegram-bot/bot/main.py"]
 ENTRYPOINT ["python3", "moonraker-telegram-bot/bot/main.py"]
 CMD ["-c", "/opt/printer_data/config/telegram.conf", "-l", "/opt/printer_data/logs"]
